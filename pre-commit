@@ -1,0 +1,46 @@
+#!/bin/sh
+
+difftool=$(git config --get diff.tool)
+
+verify_bib_file() {
+  ofile=__to_commit.bib
+  echo $1, $ofile
+  pwd
+  bibtool -r references/bibtool.rsc -i "./$1" -o $ofile
+  if ! cmp --silent $1 $ofile; then
+    $difftool $1 $ofile >/dev/null 2>/dev/null
+    cp -f $ofile $1
+    bibtool -r bibtool.rsc -i "./$1" -o $ofile
+    if ! cmp --silent $1 $ofile; then
+      rm -f $ofile
+      tput bold
+      echo "\n"$1 "is not in canonical format."
+      tput sgr0
+      echo "Fix the .bib file using bibtool."
+      echo "Failing the commit.\n\n"
+      return 1
+    else
+      git add $1
+    fi
+  fi
+  rm -f $ofile
+  return 0
+}
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+  against=HEAD
+else
+  # Initial commit: diff against an empty tree object
+  against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+fi
+
+# Redirect output to stderr.
+exec 1>&2
+
+git diff --cached --name-only --diff-filter=AM . | grep "\.bib$" | \
+  while read in; do
+    if ! verify_bib_file $in; then
+      return 1;
+    fi;
+  done
