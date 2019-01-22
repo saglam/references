@@ -1,6 +1,8 @@
-bibtool -r bibtool.rsc -X Saglam2018 ./main.bib
-bibtool -r bibtool.rsc -X SaglamT2013 ./main.bib
-bibtool -r bibtool.rsc -X Saglam2011 ./main.bib
-bibtool -r bibtool.rsc -X JowhariST2011 ./main.bib
-bibtool -r bibtool.rsc -X ErgunJS2010 ./main.bib
+#!/bin/sh
+
+keys="Saglam2018 SaglamT2013 Saglam2011 JowhariST2011 ErgunJS2010"
+
+for key in $keys; do
+  bibtool -r bibtool.rsc -X $key ./main.bib 2>/dev/null 
+done
 
