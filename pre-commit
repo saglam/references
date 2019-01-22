@@ -6,7 +6,7 @@ verify_bib_file() {
   ofile=__to_commit.bib
   echo $1, $ofile
   pwd
-  bibtool -r references/bibtool.rsc -i "./$1" -o $ofile
+  bibtool -r bibtool.rsc -i "./$1" -o $ofile
   if ! cmp --silent $1 $ofile; then
     $difftool $1 $ofile >/dev/null 2>/dev/null
     cp -f $ofile $1
@@ -44,3 +44,4 @@ git diff --cached --name-only --diff-filter=AM . | grep "\.bib$" | \
       return 1;
     fi;
   done
+
