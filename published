@@ -1,0 +1,6 @@
+bibtool -r bibtool.rsc -X Saglam2018 ./main.bib
+bibtool -r bibtool.rsc -X SaglamT2013 ./main.bib
+bibtool -r bibtool.rsc -X Saglam2011 ./main.bib
+bibtool -r bibtool.rsc -X JowhariST2011 ./main.bib
+bibtool -r bibtool.rsc -X ErgunJS2010 ./main.bib
+
